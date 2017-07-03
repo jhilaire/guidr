@@ -1,0 +1,11 @@
+Package: guidr
+Title: This package is a wrapper to the GUIDE algorithm for decision-tree methods (Loh 2002)
+Version: 0.0.5.0000
+Authors@R: person("Jerome", "Hilaire", email = "hilaire@mcc-berlin.net", role = c("aut", "cre"))
+Description: This package is a wrapper to the GUIDE algorithm for decision-tree methods (Loh 2002)
+Depends: R (>= 3.3.0)
+License: MCC 2017
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Imports: lazyeval, dplyr, tidyr, tools, ggplot2, rpart.plot, RCurl, XML, grid, ggrepel, igraph, car, gvlma, MASS, stringdist
