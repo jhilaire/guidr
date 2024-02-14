@@ -69,12 +69,43 @@ run_guide <- function(i_fpath, IMPORTANCE_SCORING=FALSE, SHOW_LOG=FALSE, DEBUG=F
 
     file.remove(file.path(i_fpath$outPath, "guide"))
   }
-  if (!paste(Sys.info()['sysname']) %in% c("Windows", "Linux")) {
+
+                              # Add macOS (Darwin) support
+  if (paste(Sys.info()['sysname']) == "Darwin") {
+    # macOS-specific commands, similar to Linux
+    # Assume guide binary for macOS is named "guide" and located in "bin/"
+    file.copy("bin/guide", i_fpath$outPath)
+
+    # Importance scoring for macOS
+    if (IMPORTANCE_SCORING) {
+      log <- system(
+        paste0("cd ", normalizePath(i_fpath$outPath), "; ./guide < ", basename(i_fpath[["is"]])),
+        intern=TRUE
+      )
+      if (SHOW_LOG) cat(sapply(log, function(k) paste0(k, "\n"))))
+    }
+
+    # Regression tree generation for macOS
+    log <- system(
+      paste0("cd ", normalizePath(i_fpath$outPath), "; ./guide < ", basename(i_fpath[["in"]])),
+      intern=TRUE
+    )
+    if (SHOW_LOG) cat(sapply(log, function(k) paste0(k, "\n")))
+
+    writeLines(log, file.path(i_fpath$outPath, paste0(bname, ".log")))
+
+    file.remove(file.path(i_fpath$outPath, "guide"))
+  }
+  
+  # Updated check for unsupported OS
+  if (!paste(Sys.info()['sysname']) %in% c("Windows", "Linux", "Darwin")) {  # Now includes "Darwin" for macOS
     stop("Other OS not yet supported.")
   }
+  
+  # Log file closure remains unchanged
   if (SHOW_LOG) cat("====================================== END OF GUIDE LOG FILE =========================================\n\n")
 }
-
+  
 # system(command, intern = FALSE, wait = TRUE, input = NULL,
 #        show.output.on.console = FALSE,
 #        minimized = FALSE, invisible = FALSE)
